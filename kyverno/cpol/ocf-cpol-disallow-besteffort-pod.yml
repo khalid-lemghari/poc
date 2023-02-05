@@ -1,0 +1,38 @@
+---
+apiVersion : kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  annotations:
+    kyverno.io/kubernetes-version: "1.24"
+    kyverno.io/kyverno-version: "2.7.0"
+    meta.helm.sh/release-name: kyverno-policies
+    meta.helm.sh/release-namespace: kyverno
+    pod-policies.kyverno.io/autogen-controllers: none
+    policies.kyverno.io/category: Omnia Compliance Framework
+    policies.kyverno.io/description: Disallow besteffort pod
+    policies.kyverno.io/minversion: "2.7.0"
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/title: Disallow besteffort pod
+  name: ocf-cpol-disallow-besteffort-pod
+spec:
+  background: true
+  rules:
+  - name: ocf-check-resources
+    match:
+      resources:
+        kinds:
+        - Pod
+        namespaces:
+          - ocf-limits-workshop
+    validate:
+      message: "The cpu/memory limits are required."
+      pattern:
+        spec:
+          containers:
+          - resources:
+              limits:
+                cpu: "?*"
+                memory: "?*"
+  validationFailureAction: Enforce
+---

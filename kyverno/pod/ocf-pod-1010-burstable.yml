@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ocf-pod-1010-burstable
+  namespace: ocf-limits-workshop
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    resources:
+      limits:
+        cpu: 72m
+      requests:
+        cpu: 18m
